@@ -1,3 +1,5 @@
+//Explication de hangman v1.0
+
 // package + import necessaire au fonctionnement du programme
 package main
 
