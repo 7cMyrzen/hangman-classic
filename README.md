@@ -23,3 +23,7 @@
 # Hangman [auto/manual] v1.2
   - hangman :
       - Couleur
+
+# Hangman [auto/manual] v1.3
+  - hangman :
+      - Niveau Hard (4 essais)
