@@ -61,9 +61,15 @@ func main() {
 		lose = inputl
 		resetTerminal()
 		m.Println("Combien de tentative ?")
+		hc.Println("	[4]		4 tentives")
 		hc.Println("	[6]		6 tentives")
 		hc.Println("	[10]		10 tentatives")
 		fmt.Scanln(&tryChoice)
+		if tryChoice == "4" {
+			tryNumber := 4
+			playHangman(word, win, lose, tryNumber)
+			return
+		}
 		if tryChoice == "6" {
 			tryNumber := 6
 			playHangman(word, win, lose, tryNumber)
@@ -110,6 +116,9 @@ func playHangman(word string, win string, lose string, tryNumber int) {
 
 	for nimput := 1; nimput <= 26; nimput++ {
 		resetTerminal()
+		if maxTry == 4 {
+			printHangmanHard(errcount)
+		}
 		if maxTry == 6 {
 			printHangmanNormal(errcount)
 		}
@@ -144,6 +153,16 @@ func playHangman(word string, win string, lose string, tryNumber int) {
 			errcount++
 			time.Sleep(1 * time.Second)
 
+			if maxTry == 4 {
+				if errcount == 4 {
+					resetTerminal()
+					r.Println(lose)
+					r.Println("Le mot etait", word)
+					time.Sleep(3 * time.Second)
+					retryHangman()
+					break
+				}
+			}
 			if maxTry == 6 {
 				if errcount == 6 {
 					resetTerminal()
@@ -165,6 +184,36 @@ func playHangman(word string, win string, lose string, tryNumber int) {
 				}
 			}
 		}
+	}
+}
+
+func printHangmanHard(errcount int) {
+	hangman := []string{
+		"  +---+",
+		"  |   |",
+		"      |",
+		"      |",
+		"      |",
+		"      |",
+		"=========",
+	}
+
+	switch errcount {
+	case 1:
+		hangman[2] = "  O   |"
+	case 2:
+		hangman[2] = "  O   |"
+		hangman[3] = "  |   |"
+	case 3:
+		hangman[2] = "  O   |"
+		hangman[3] = " /|\\  |"
+	case 4:
+		hangman[2] = "  O   |"
+		hangman[3] = " /|\\  |"
+		hangman[4] = " / \\  |"
+	}
+	for _, line := range hangman {
+		fmt.Println(line)
 	}
 }
 
