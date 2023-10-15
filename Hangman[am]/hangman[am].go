@@ -8,6 +8,8 @@ import (
 	"os"
 	"strings"
 	"time"
+
+	"github.com/fatih/color"
 )
 
 func resetTerminal() {
@@ -15,9 +17,12 @@ func resetTerminal() {
 }
 
 func main() {
+	m := color.New(color.FgHiMagenta)
+	hc := color.New(color.FgHiCyan)
+	r := color.New(color.FgHiRed)
 	resetTerminal()
 	var choice string
-	fmt.Println("Voulez-vous lancer le pendu de maniere automatique [a] ou voulez vous choisir le mot a faire deviner manuellement [m] ?")
+	m.Println("Voulez-vous lancer le pendu de maniere automatique [a] ou voulez vous choisir le mot a faire deviner manuellement [m] ?")
 	fmt.Scanln(&choice)
 	if choice == "a" {
 		resetTerminal()
@@ -44,20 +49,20 @@ func main() {
 		var lose string
 		var tryChoice string
 		reader := bufio.NewReader(os.Stdin)
-		fmt.Println("Quel est le mot a faire deviner ?")
+		m.Println("Quel est le mot a faire deviner ?")
 		fmt.Scanln(&word)
 		resetTerminal()
-		fmt.Println("Quel est le message de victoire ?")
+		m.Println("Quel est le message de victoire ?")
 		inputw, _ := reader.ReadString('\n')
 		win = inputw
 		resetTerminal()
-		fmt.Println("Quel est le message de defaite ?")
+		m.Println("Quel est le message de defaite ?")
 		inputl, _ := reader.ReadString('\n')
 		lose = inputl
 		resetTerminal()
-		fmt.Println("Combien de tentative ?")
-		fmt.Println("	[6]		6 tentives")
-		fmt.Println("	[10]		10 tentatives")
+		m.Println("Combien de tentative ?")
+		hc.Println("	[6]		6 tentives")
+		hc.Println("	[10]		10 tentatives")
 		fmt.Scanln(&tryChoice)
 		if tryChoice == "6" {
 			tryNumber := 6
@@ -70,8 +75,8 @@ func main() {
 			return
 		} else {
 			resetTerminal()
-			fmt.Println("Erreur : ", tryChoice)
-			fmt.Println("Ce choix n'existe pas.")
+			r.Println("Erreur : ", tryChoice)
+			r.Println("Ce choix n'existe pas.")
 			time.Sleep(1 * time.Second)
 			resetTerminal()
 			return
@@ -79,8 +84,8 @@ func main() {
 		}
 	} else {
 		resetTerminal()
-		fmt.Println("Erreur : ", choice)
-		fmt.Println("Ce choix n'existe pas.")
+		r.Println("Erreur : ", choice)
+		r.Println("Ce choix n'existe pas.")
 		time.Sleep(3 * time.Second)
 		resetTerminal()
 		return
@@ -88,6 +93,10 @@ func main() {
 }
 
 func playHangman(word string, win string, lose string, tryNumber int) {
+	m := color.New(color.FgHiMagenta)
+	hc := color.New(color.FgHiCyan)
+	r := color.New(color.FgHiRed)
+	y := color.New(color.FgHiYellow)
 	var maxTry int
 	maxTry = tryNumber
 	var hiddenword []string
@@ -107,10 +116,10 @@ func playHangman(word string, win string, lose string, tryNumber int) {
 		if maxTry == 10 {
 			printHangmanEasy(errcount)
 		}
-		fmt.Println(hiddenline)
-		fmt.Println("Vous avez deja essayé les lettres suivantes: ", tried)
-		fmt.Println("Vous avez encore le droit a ", maxTry-errcount, " erreur(s)")
-		fmt.Println("Veuillez entrer une lettre: ")
+		hc.Println(hiddenline)
+		m.Println("Vous avez deja essayé les lettres suivantes: ", tried)
+		m.Println("Vous avez encore le droit a ", maxTry-errcount, " erreur(s)")
+		m.Println("Veuillez entrer une lettre: ")
 		var input string
 		fmt.Scanln(&input)
 		tried = append(tried, input)
@@ -123,23 +132,23 @@ func playHangman(word string, win string, lose string, tryNumber int) {
 			}
 			if strings.Join(hiddenline, "") == word {
 				resetTerminal()
-				fmt.Println(hiddenline)
-				fmt.Println(win)
+				y.Println(hiddenline)
+				y.Println(win)
 				time.Sleep(2 * time.Second)
 				retryHangman()
 				break
 			}
 		} else {
 			resetTerminal()
-			fmt.Println("Erreur, cette lettre n'est pas dans le mot")
+			r.Println("Erreur, cette lettre n'est pas dans le mot")
 			errcount++
 			time.Sleep(1 * time.Second)
 
 			if maxTry == 6 {
 				if errcount == 6 {
 					resetTerminal()
-					fmt.Println(lose)
-					fmt.Println("Le mot etait", word)
+					r.Println(lose)
+					r.Println("Le mot etait", word)
 					time.Sleep(3 * time.Second)
 					retryHangman()
 					break
@@ -148,8 +157,8 @@ func playHangman(word string, win string, lose string, tryNumber int) {
 			if maxTry == 10 {
 				if errcount == 10 {
 					resetTerminal()
-					fmt.Println(lose)
-					fmt.Println("Le mot etait", word)
+					r.Println(lose)
+					r.Println("Le mot etait", word)
 					time.Sleep(3 * time.Second)
 					retryHangman()
 					break
@@ -291,8 +300,10 @@ func printHangmanEasy(errcount int) {
 }
 
 func retryHangman() {
+	hc := color.New(color.FgHiCyan)
+	r := color.New(color.FgHiRed)
 	resetTerminal()
-	fmt.Println("Voulez-vous recommencer le pendu [o/n] ?")
+	hc.Println("Voulez-vous recommencer le pendu [o/n] ?")
 	var retry string
 	fmt.Scanln(&retry)
 	if retry == "o" {
@@ -305,7 +316,7 @@ func retryHangman() {
 	}
 	if retry != "n" && retry != "o" {
 		resetTerminal()
-		fmt.Println("Erreur : [o] pour oui et [n] pour non.")
+		r.Println("Erreur : [o] pour oui et [n] pour non.")
 		time.Sleep(2 * time.Second)
 		resetTerminal()
 		return
