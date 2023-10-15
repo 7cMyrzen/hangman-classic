@@ -1,4 +1,5 @@
 # hangman-classic
+  - Projet Hangman (Pendu)
 
 # test commit
   - test
