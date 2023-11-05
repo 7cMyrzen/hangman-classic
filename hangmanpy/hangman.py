@@ -92,6 +92,14 @@ def playHangman(win, lose, word, userTry):
         hiddenWord.append("_")
     hidden_word = list(word)
 
+    helpchar = ["&", " ", ",", ".", "-", "_"]
+    for elmt in helpchar:
+        if elmt in hidden_word:
+                    for i in range(len(hidden_word)):
+                        if hidden_word[i] == elmt:
+                            hiddenWord[i] = elmt
+                            hidden_word[i] = elmt
+
     while errcount < maxTry:
         clearTerminal()
         
